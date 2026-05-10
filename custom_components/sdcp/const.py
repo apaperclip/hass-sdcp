@@ -12,5 +12,5 @@ ATTRIBUTION = "Data provided by http://jsonplaceholder.typicode.com/"
 PARALLEL_UPDATES = 1
 
 # Default configuration values
-DEFAULT_UPDATE_INTERVAL_SECONDS = 30
+DEFAULT_UPDATE_INTERVAL_SECONDS = 5
 DEFAULT_ENABLE_DEBUGGING = False
