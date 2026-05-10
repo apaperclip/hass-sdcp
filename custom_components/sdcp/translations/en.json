@@ -84,6 +84,17 @@
       },
       "runtime": {
         "name": "Total Runtime"
+      },
+      "power_state": {
+        "name": "Power State",
+        "state": {
+          "standby": "Standby",
+          "start_up": "Starting Up",
+          "start_up_lamp": "Lamp Starting",
+          "power_on": "On",
+          "cooling": "Cooling Down",
+          "cooling2": "Cooling Down 2"
+        }
       }
     },
     "binary_sensor": {
