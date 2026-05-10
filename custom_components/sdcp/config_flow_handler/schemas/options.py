@@ -17,8 +17,23 @@ from typing import Any
 
 import voluptuous as vol
 
-from custom_components.sdcp.const import DEFAULT_ENABLE_DEBUGGING, DEFAULT_UPDATE_INTERVAL_HOURS
+from custom_components.sdcp.const import DEFAULT_ENABLE_DEBUGGING, DEFAULT_UPDATE_INTERVAL_SECONDS
 from homeassistant.helpers import selector
+
+
+def _get_update_interval_default(defaults: Mapping[str, Any]) -> int:
+    """Get the default update interval in seconds.
+
+    Supports legacy stored values in hours via update_interval_hours.
+    """
+    if "update_interval_seconds" in defaults:
+        return int(defaults["update_interval_seconds"])
+
+    legacy_value = defaults.get("update_interval_hours")
+    if legacy_value is not None:
+        return int(float(legacy_value) * 3600)
+
+    return DEFAULT_UPDATE_INTERVAL_SECONDS
 
 
 def get_options_schema(defaults: Mapping[str, Any] | None = None) -> vol.Schema:
@@ -36,14 +51,14 @@ def get_options_schema(defaults: Mapping[str, Any] | None = None) -> vol.Schema:
     return vol.Schema(
         {
             vol.Optional(
-                "update_interval_hours",
-                default=defaults.get("update_interval_hours", DEFAULT_UPDATE_INTERVAL_HOURS),
+                "update_interval_seconds",
+                default=_get_update_interval_default(defaults),
             ): selector.NumberSelector(
                 selector.NumberSelectorConfig(
-                    min=0.25,
-                    max=24,
-                    step=0.25,
-                    unit_of_measurement="h",
+                    min=30,
+                    max=86400,
+                    step=30,
+                    unit_of_measurement="s",
                     mode=selector.NumberSelectorMode.BOX,
                 ),
             ),

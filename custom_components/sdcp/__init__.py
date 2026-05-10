@@ -26,7 +26,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.loader import async_get_loaded_integration
 
 from .api import SDCPHomeAssistantApiClient
-from .const import DOMAIN, LOGGER
+from .const import DEFAULT_UPDATE_INTERVAL_SECONDS, DOMAIN, LOGGER
 from .coordinator import SDCPHomeAssistantDataUpdateCoordinator
 from .data import SDCPHomeAssistantData
 from .service_actions import async_setup_services
@@ -111,12 +111,17 @@ async def async_setup_entry(
     )
 
     # Initialize coordinator with config_entry
+    update_interval_seconds = entry.options.get(
+        "update_interval_seconds",
+        DEFAULT_UPDATE_INTERVAL_SECONDS,
+    )
+
     coordinator = SDCPHomeAssistantDataUpdateCoordinator(
         hass=hass,
         logger=LOGGER,
         name=DOMAIN,
         config_entry=entry,
-        update_interval=timedelta(hours=1),
+        update_interval=timedelta(seconds=update_interval_seconds),
         always_update=False,  # Only update entities when data actually changes
     )
 
