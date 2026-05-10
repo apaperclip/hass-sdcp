@@ -8,9 +8,11 @@ via SDCP protocol using the pysdcp-extended library.
 from __future__ import annotations
 
 import asyncio
-from typing import Any
+from typing import Any, cast
 
-from pysdcp_extended import Projector  # type: ignore[import-untyped]
+from pysdcp_extended import ACTIONS, COMMANDS, POWER_STATUS, Projector  # type: ignore[import-untyped]
+
+POWER_STATUS_REVERSE = {value: key.lower() for key, value in POWER_STATUS.items()}
 
 
 class SDCPHomeAssistantApiClientError(Exception):
@@ -114,14 +116,18 @@ class SDCPHomeAssistantApiClient:
             raise SDCPHomeAssistantApiClientCommunicationError("Not connected to projector")
 
         try:
-            power_status = await asyncio.to_thread(self._client.get_power)
+            power_code = await asyncio.to_thread(
+                self._client._send_command,  # noqa: SLF001
+                ACTIONS["GET"],
+                COMMANDS["GET_STATUS_POWER"],
+            )
             lamp_hours = await asyncio.to_thread(self._client.get_lamp_hours)
         except Exception as exception:
             self._connected = False
             msg = f"Error querying projector at {self._host}: {exception}"
             raise SDCPHomeAssistantApiClientCommunicationError(msg) from exception
 
-        power_state = "on" if power_status else "standby"
+        power_state = POWER_STATUS_REVERSE.get(cast(int, power_code), f"unknown_{power_code}")
         return {
             "power": power_state,
             "lamp_hours": lamp_hours,
