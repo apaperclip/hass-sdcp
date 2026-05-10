@@ -79,6 +79,9 @@
       "filter_life": {
         "name": "Filter Life Remaining"
       },
+      "lamp_hours": {
+        "name": "Lamp Timer"
+      },
       "runtime": {
         "name": "Total Runtime"
       }

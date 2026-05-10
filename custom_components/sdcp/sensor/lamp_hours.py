@@ -1,4 +1,4 @@
-"""Power state sensor for sdcp."""
+"""Lamp timer sensor for sdcp."""
 
 from __future__ import annotations
 
@@ -6,22 +6,25 @@ from typing import TYPE_CHECKING
 
 from custom_components.sdcp.entity import SDCPHomeAssistantEntity
 from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
+from homeassistant.const import EntityCategory
 
 if TYPE_CHECKING:
     from custom_components.sdcp.coordinator import SDCPHomeAssistantDataUpdateCoordinator
 
 ENTITY_DESCRIPTIONS = (
     SensorEntityDescription(
-        key="power_state",
-        translation_key="power_state",
-        icon="mdi:projector",
+        key="lamp_hours",
+        translation_key="lamp_hours",
+        icon="mdi:timer",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        native_unit_of_measurement="h",
         has_entity_name=True,
     ),
 )
 
 
-class SDCPHomeAssistantPowerStateSensor(SensorEntity, SDCPHomeAssistantEntity):
-    """Power state sensor class."""
+class SDCPHomeAssistantLampHoursSensor(SensorEntity, SDCPHomeAssistantEntity):
+    """Lamp hours sensor class."""
 
     def __init__(
         self,
@@ -32,11 +35,11 @@ class SDCPHomeAssistantPowerStateSensor(SensorEntity, SDCPHomeAssistantEntity):
         super().__init__(coordinator, entity_description)
 
     @property
-    def native_value(self) -> str | None:
+    def native_value(self) -> int | None:
         """Return the native value of the sensor."""
         if not self.coordinator.last_update_success:
             return None
-        return self.coordinator.data.get("power")
+        return self.coordinator.data.get("lamp_hours")
 
     @property
     def available(self) -> bool:
