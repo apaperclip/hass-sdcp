@@ -124,11 +124,6 @@
         }
       }
     },
-    "number": {
-      "target_humidity": {
-        "name": "Target Humidity"
-      }
-    },
     "button": {
       "reset_filter": {
         "name": "Reset Filter Timer"

@@ -128,6 +128,7 @@ class SDCPHomeAssistantApiClient:
             raise SDCPHomeAssistantApiClientCommunicationError(msg) from exception
 
         power_state = POWER_STATUS_REVERSE.get(cast(int, power_code), f"unknown_{power_code}")
+
         return {
             "power": power_state,
             "lamp_hours": lamp_hours,
