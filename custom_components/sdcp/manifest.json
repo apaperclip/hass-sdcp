@@ -7,11 +7,11 @@
   "config_flow": true,
   "dependencies": [],
   "documentation": "https://github.com/apaperclip/hass-sdcp",
-  "requirements": [
-    "pysdcp_extended>=0.1.0"
-  ],
   "integration_type": "device",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/apaperclip/hass-sdcp/issues",
+  "requirements": [
+    "pysdcp_extended>=0.1.0"
+  ],
   "version": "0.1.0"
 }
