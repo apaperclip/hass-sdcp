@@ -3,7 +3,7 @@
 # See custom_components/sdcp/manifest.json for the authoritative list
 
 # Add your integration's runtime dependencies here
-pysdcp-extended>=0.1.0
+pysdcp-extended>=0.2.0
 
 # Note: Home Assistant core dependencies are already available
 # Only list additional packages your integration needs
