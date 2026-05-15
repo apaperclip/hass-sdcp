@@ -10,6 +10,7 @@
 **SDCP for Home Assistant** integrates Sony projectors using the SDCP protocol via the `pysdcp-extended` library.
 
 The integration supports:
+
 - automatic UDP advertisement discovery
 - manual IP configuration
 - lifecycle-aware monitoring
@@ -30,11 +31,11 @@ The integration supports:
 
 **This integration will set up the following platforms.**
 
-| Platform | Description |
-|---|---|
-| `media_player` | Projector power control and source selection |
-| `select` | HDMI inputs, calibration presets, and dynamic range modes |
-| `sensor` | Lamp runtime diagnostic sensor |
+| Platform       | Description                                               |
+| -------------- | --------------------------------------------------------- |
+| `media_player` | Projector power control and source selection              |
+| `select`       | HDMI inputs, calibration presets, and dynamic range modes |
+| `sensor`       | Lamp runtime diagnostic sensor                            |
 
 ## 🚀 Quick Start
 
@@ -67,17 +68,19 @@ If advertisements are unavailable:
 
 The integration uses two monitoring modes:
 
-| Mode | Behavior |
-|---|---|
+| Mode    | Behavior                                                        |
+| ------- | --------------------------------------------------------------- |
 | Passive | Advertisement-driven monitoring while projector non-operational |
-| Active | Operational polling while projector operational |
+| Active  | Operational polling while projector operational                 |
 
 During passive monitoring:
+
 - media_player remains available
 - operational entities become unavailable
 - operational polling stops
 
 During active monitoring:
+
 - operational polling enabled
 - HDMI input monitored
 - calibration preset monitored
@@ -111,6 +114,7 @@ The integration supports:
 - hybrid advertisement/manual operation
 
 Advertisements are used for:
+
 - passive monitoring
 - availability heartbeat
 - remote power state detection
