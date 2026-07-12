@@ -12,6 +12,8 @@ from typing import Any, cast
 
 from pysdcp_extended import ACTIONS, COMMANDS, POWER_STATUS, Projector  # type: ignore[import-untyped]
 
+from custom_components.sdcp.const import IR_COMMAND_POWER_OFF, IR_COMMAND_POWER_ON
+
 POWER_STATUS_REVERSE = {value: key.lower() for key, value in POWER_STATUS.items()}
 
 
@@ -134,3 +136,40 @@ class SDCPHomeAssistantApiClient:
             "lamp_hours": lamp_hours,
             "connected": True,
         }
+
+    async def async_set_power(self, *, on: bool) -> None:
+        """
+        Turn the projector on or off.
+
+        Sent as a simulated infrared remote command rather than via the library's
+        set_power(), which uses an item this projector generation does not implement.
+        See IR_COMMAND_POWER_ON / IR_COMMAND_POWER_OFF in const.py.
+
+        These items are fire-and-forget: the projector executes them without sending
+        a response, so a successful call only means the command was delivered, not
+        that the projector has finished changing state. Power transitions take time
+        (warm-up, cooling), so the resulting state arrives via the next coordinator
+        poll rather than immediately.
+
+        Args:
+            on: True to power the projector on, False to power it off.
+
+        Raises:
+            SDCPHomeAssistantApiClientCommunicationError: If communication fails.
+
+        """
+        if not self._connected or not self._client:
+            raise SDCPHomeAssistantApiClientCommunicationError("Not connected to projector")
+
+        command = IR_COMMAND_POWER_ON if on else IR_COMMAND_POWER_OFF
+
+        try:
+            await asyncio.to_thread(
+                self._client._send_command,  # noqa: SLF001
+                ACTIONS["SET"],
+                command,
+            )
+        except Exception as exception:
+            self._connected = False
+            msg = f"Error setting power on projector at {self._host}: {exception}"
+            raise SDCPHomeAssistantApiClientCommunicationError(msg) from exception

@@ -38,6 +38,7 @@ if TYPE_CHECKING:
 
 PLATFORMS: list[Platform] = [
     Platform.SENSOR,
+    Platform.SWITCH,
 ]
 
 # This integration is configured via config entries only
